@@ -148,50 +148,61 @@ async function startBot() {
       await sock.sendMessage(grupoId, { text: `Times cadastrados nesse grupo\n\n${listaTimes}` });
     }
 
+let listaEnvio = ""
     //cartelas enviadas nos grupos e apaga as cartelas
     if (!cadastro && grupo && timesCadastradosPorGrupo[grupoId].length !== 0) {
+      const chamada = timesCadastradosPorGrupo[grupoId][0].map(x => `clube: ${x}`);
+      const listaAtualizada = timesCadastradosPorGrupo[grupoId][0].map(x => `⚪ ${x}`);
       if (pegaClube) {
 
         timesEnviadoGrupo[grupoId].push(timeAnalisado);
-      }
-      const timesEnviadosHoje = timesEnviadoGrupo[grupoId].filter(x => x);
-      console.log(timesCadastradosPorGrupo[grupoId].length)
-
-
-      let listaHoje = timesCadastradosPorGrupo[grupoId][0].map(x => `clube: ${x}`);
-      let listaAtualizada = timesCadastradosPorGrupo[grupoId][0].map(x => `⚪ ${x}`);
-
-      console.log("lista hoje", listaHoje)
-
-      if (pegaClube) {
         cartelaPorGrupo[grupoId].push(`${horaAtual()}\n${texto}\n\n`);
-        timesPorGrupo[grupoId].push(`${nomeClube(texto)} - ${horaAtual()}\n`);
       }
 
+      const timesEnviadosHoje = timesEnviadoGrupo[grupoId].filter(x => x);
+      
       if (pegaClube && timesCadastradosPorGrupo[grupoId][0].includes(timeAnalisado)) {
-        for (let i = 0; i < listaHoje.length; i++) {
+        for (let i = 0; i < chamada.length; i++) {
           for (let j = 0; j < timesEnviadoGrupo[grupoId].length; j++) {
-            if (nomeClube(listaHoje[i]).join() === timesEnviadosHoje[j]) {
-              listaAtualizada.splice(i, 1, `✅ ${timesEnviadosHoje[j]} - ${horaAtual()}`);
+            if (nomeClube(chamada[i]).join() === timesEnviadoGrupo[grupoId][j]) {
+              listaAtualizada.splice(i, 1, `✅ ${timesEnviadoGrupo[grupoId][j]} - ${horaAtual()}`);
             }
           }
         }
-
-        let timesEnviados = ""
-        for (let i = 0; i < listaAtualizada.length; i++) {
-          timesEnviados += `${listaAtualizada[i]}\n`
-        }
-
-        await sock.sendMessage(grupoId, { text: `*Lista de cartelas enviadas hoje*\n\n${timesEnviados}\n*Boa sorte a TODES e que perca o pior.*` });
-
-      } else if (pegaClube && !timesCadastradosPorGrupo[grupoId][0].includes(timeAnalisado) && !cadastro && !remocao) {
-        //const timesNaoListados = []
-
-        timesNaoListados[grupoId].push(`✅ ${timeAnalisado}`)
-        const times = viraString(timesNaoListados[grupoId]);
-
-        await sock.sendMessage(grupoId, { text: `*Lista de cartelas enviadas hoje*\n\n${times}\n*Não estão na lista dos cadastrados por algum motivo, fala com o adilço*` });
+      } else if (pegaClube && !timesCadastradosPorGrupo[grupoId][0].includes(timeAnalisado) && !cadastro && !remocao) {  
+        timesNaoListados[grupoId].push(`✅ ${timeAnalisado} - ${horaAtual()}`)
       }
+
+      if (timesNaoListados[grupoId].length === 0) {
+        listaEnvio = ""
+        for (let i = 0; i < listaAtualizada.length; i++) {
+          listaEnvio += `${listaAtualizada[i]}\n`
+        }
+      } else {
+        listaEnvio = ""
+
+        
+        for (let i = 0; i < chamada.length; i++) {
+          for (let j = 0; j < timesEnviadoGrupo[grupoId].length; j++) {
+            if (nomeClube(chamada[i]).join() === timesEnviadoGrupo[grupoId][j]) {
+              listaAtualizada.splice(i, 1, `✅ ${timesEnviadoGrupo[grupoId][j]} - ${horaAtual()}`);
+            }
+          }
+        }
+      
+        for (let k = 0; k < listaAtualizada.length; k++) {
+          listaEnvio += `${listaAtualizada[k]}\n`
+        }
+        
+        listaEnvio += "\n\n*Não estão na lista dos cadastrados por algum motivo, fala com o adilço*\n\n"
+        for (let j = 0; j < timesNaoListados[grupoId].length; j++) {
+          listaEnvio += `${timesNaoListados[grupoId][j]}\n`
+          
+        }
+      }
+
+  await sock.sendMessage(grupoId, { text: `*Lista de cartelas enviadas hoje*\n\n${listaEnvio}\n*Boa sorte a TODES e que perca o pior.*` });
+
 
       if (zeraLista && autorizado) {
         cartelaPorGrupo[grupoId] = [];
@@ -229,8 +240,8 @@ async function startBot() {
     //Envio de informaçoes
     if (texto.match(/bot fmw/gi) && grupo) {
       let codigo = texto.replace(/bot fmw/gi, "").trim()
-      console.log(codigo)
-      console.log(informacoes.dados[0])
+      //console.log(codigo)
+      //console.log(informacoes.dados[0])
       for (let i = 0; i < informacoes.dados.length; i++) {
 
         if (informacoes.dados[i][0].toLowerCase() === codigo.toLowerCase()) {
@@ -285,7 +296,7 @@ function cortaTimes(time) {
   const listaDeTimes = time.match(rgxCapturaClube) || ["clube: "]
   const timesCortados = []
   for (let i = 0; i < listaDeTimes.length; i++) {
-    console.log(listaDeTimes.length)
+    //console.log(listaDeTimes.length)
     timesCortados.push(nomeClube(listaDeTimes[i]).join())
   }
   //console.log(timesCortados)
