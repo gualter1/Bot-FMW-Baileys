@@ -35,6 +35,7 @@ const timesCadastradosPorGrupo = {};
 const timesPorGrupo = {};
 const cartelaPorGrupo = {};
 const timesEnviadoGrupo = {};
+const timesNaoListados = {}
 const informacoes = { dados: [] }
 
 async function startBot() {
@@ -117,6 +118,7 @@ async function startBot() {
       cartelaPorGrupo[grupoId] = [];
       timesPorGrupo[grupoId] = [];
       timesEnviadoGrupo[grupoId] = [];
+      timesNaoListados[grupoId] = []
     }
 
 
@@ -205,15 +207,18 @@ async function startBot() {
         await sock.sendMessage(grupoId, { text: `*Lista de cartelas enviadas hoje*\n\n${timesEnviados}\n*Boa sorte a TODES e que perca o pior.*` });
 
       } else if (pegaClube && !timesCadastradosPorGrupo[grupoId][0].includes(timeAnalisado) && !cadastro && !remocao) {
-        const timesNaoListados = []
-        timesNaoListados.push(`✅ ${timeAnalisado}\n`)
-        const times = viraString(timesNaoListados);
+        //const timesNaoListados = []
+
+        timesNaoListados[grupoId].push(`✅ ${timeAnalisado}`)
+        const times = viraString(timesNaoListados[grupoId]);
+
         await sock.sendMessage(grupoId, { text: `*Lista de cartelas enviadas hoje*\n\n${times}\n*Não estão na lista dos cadastrados por algum motivo, fala com o adilço*` });
       }
 
       if (zeraLista && autorizado) {
         cartelaPorGrupo[grupoId] = [];
         timesEnviadoGrupo[grupoId] = [];
+        timesNaoListados[grupoId] = [];
         listaHoje = timesCadastradosPorGrupo[grupoId][0].filter(x => x).map(x => `⚪ clube: ${x}`);
         listaAtualizada = timesCadastradosPorGrupo[grupoId][0].filter(x => x).map(x => `⚪ ${x}`);
         await sock.sendMessage(grupoId, { text: 'A lista foi reiniciada' });
