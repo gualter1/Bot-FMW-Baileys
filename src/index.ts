@@ -73,29 +73,17 @@ async function startBot() {
 
   // Mensagens recebidas
 
+  
   sock.ev.on('messages.upsert', async ({ messages, type }) => {
-    //const msg = messages[0]       // Pega a primeira mensagem do lote (normalmente vem uma por vez)
-    //if (!msg.message) return      // Se não tiver conteúdo, ignora
-
-
-
-    //console.log(messages)
-    // const trataMsg = async (sock: any, msg: any) => {
     const message = messages[0]
-    //console.log(123, message)
-    //console.log(1234, message.message.Message)
-    if (!message || message.key.fromMe) return
-    //|| !message.message.conversation)
-    //const texto = message.message.extendedTextMessage.text | message.message.conversation 
-    //console.log("texto", texto )
-    const texto = message.message.conversation || message.message.extendedTextMessage.text  // Extrai o texto da mensagem
-    //console.log(message.key);
+    const hasText = message?.message?.conversation || message?.message?.extendedTextMessage?.text
 
+    if (!message || message.key.fromMe || !hasText) return
+
+    const texto = message.message.conversation || message.message.extendedTextMessage.text  // Extrai o texto da mensagem
     const grupoId = message.key.remoteJid
-    //console.log(grupoId)
 
     const timeAnalisado = nomeClube(texto).join()
-    //console.log(timeAnalisado)
     const pegaClube = texto.match(rgxCapturaClube)
     const cadastro = texto.match(cadastraTime)
     const zeraLista = texto.match(apagaCartela)
@@ -104,13 +92,6 @@ async function startBot() {
     const apagaCodigoSuporte = texto.match(apagaCodigo)
     const grupo = grupoId.includes('@g.us')
     const autorizado = message.key.participant === userSeguro
-    //console.log(autorizado);
-
-
-    // if (texto === 'oi12345') {                   // Se a mensagem for 'oi12345'
-    //   console.log(123)
-    //     await sock.sendMessage(message.key.remoteJid, { text: 'Olá! Sou um bot 🤖' })  // Responde no mesmo chat
-    //   }
 
     // Inicializa grupos
     if (!timesCadastradosPorGrupo[grupoId]) {
@@ -120,9 +101,6 @@ async function startBot() {
       timesEnviadoGrupo[grupoId] = [];
       timesNaoListados[grupoId] = []
     }
-
-
-
 
     // Cadastro e remoção de times
     if (autorizado && grupo) {
