@@ -150,9 +150,9 @@ async function startBot() {
 
 let listaEnvio = ""
     //cartelas enviadas nos grupos e apaga as cartelas
-    if (!cadastro && grupo && timesCadastradosPorGrupo[grupoId].length !== 0) {
-      const chamada = timesCadastradosPorGrupo[grupoId][0].map(x => `clube: ${x}`);
-      const listaAtualizada = timesCadastradosPorGrupo[grupoId][0].map(x => `⚪ ${x}`);
+    if (!cadastro && grupo && timesCadastradosPorGrupo[grupoId].length !== 0 && texto !== mandaCartela) {
+      let chamada = timesCadastradosPorGrupo[grupoId][0].map(x => `clube: ${x}`);
+      let listaAtualizada = timesCadastradosPorGrupo[grupoId][0].map(x => `⚪ ${x}`);
       if (pegaClube) {
 
         timesEnviadoGrupo[grupoId].push(timeAnalisado);
@@ -173,15 +173,15 @@ let listaEnvio = ""
         timesNaoListados[grupoId].push(`✅ ${timeAnalisado} - ${horaAtual()}`)
       }
 
-      if (timesNaoListados[grupoId].length === 0) {
+      if (pegaClube && timesNaoListados[grupoId].length === 0) {
         listaEnvio = ""
         for (let i = 0; i < listaAtualizada.length; i++) {
           listaEnvio += `${listaAtualizada[i]}\n`
         }
-      } else {
+        await sock.sendMessage(grupoId, { text: `*Lista de cartelas enviadas hoje*\n\n${listaEnvio}\n*Boa sorte a TODES e que perca o pior.*` });
+      } else if (pegaClube && timesNaoListados[grupoId].length > 0){
         listaEnvio = ""
-
-        
+       
         for (let i = 0; i < chamada.length; i++) {
           for (let j = 0; j < timesEnviadoGrupo[grupoId].length; j++) {
             if (nomeClube(chamada[i]).join() === timesEnviadoGrupo[grupoId][j]) {
@@ -199,16 +199,14 @@ let listaEnvio = ""
           listaEnvio += `${timesNaoListados[grupoId][j]}\n`
           
         }
+        await sock.sendMessage(grupoId, { text: `*Lista de cartelas enviadas hoje*\n\n${listaEnvio}\n*Boa sorte a TODES e que perca o pior.*` });
       }
-
-  await sock.sendMessage(grupoId, { text: `*Lista de cartelas enviadas hoje*\n\n${listaEnvio}\n*Boa sorte a TODES e que perca o pior.*` });
-
 
       if (zeraLista && autorizado) {
         cartelaPorGrupo[grupoId] = [];
         timesEnviadoGrupo[grupoId] = [];
         timesNaoListados[grupoId] = [];
-        listaHoje = timesCadastradosPorGrupo[grupoId][0].filter(x => x).map(x => `⚪ clube: ${x}`);
+        chamada = timesCadastradosPorGrupo[grupoId][0].filter(x => x).map(x => `⚪ clube: ${x}`);
         listaAtualizada = timesCadastradosPorGrupo[grupoId][0].filter(x => x).map(x => `⚪ ${x}`);
         await sock.sendMessage(grupoId, { text: 'A lista foi reiniciada' });
       } else if (zeraLista && !autorizado) {
