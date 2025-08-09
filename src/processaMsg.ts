@@ -65,7 +65,7 @@ function trataMsg(sock) {
                     const resuldado = descadastramento(times.timesCadastradosPorGrupo[grupoId], texto)
 
                     await sock.sendMessage(grupoId, { text: `Times cadastrados no grupo\n\n${resuldado}` });
-                } cadastro && remocao && enviarCartelas && addMassa 
+                } cadastro && remocao && enviarCartelas && addMassa
                 //Manda as cartelas enviadas
                 if (enviarCartelas) {
                     let listaTimes = viraString(times.cartelaPorGrupo[grupoId]);
@@ -146,7 +146,9 @@ function trataMsg(sock) {
             if (!(cadastro && remocao && enviarCartelas) && times.timesCadastradosPorGrupo[grupoId].length !== 0 && pegaClube) {
                 chamada = times.timesCadastradosPorGrupo[grupoId][0].map(x => `clube: ${x}`);
                 gabarito = times.timesCadastradosPorGrupo[grupoId][0].map(x => `⚪ ${x}`);
-                totalEnvio = gabarito.length - (times.timesEnviadoHora[grupoId].length || 0)
+                if (times.timesEnviadoHora[grupoId].length > 0) {
+                    totalEnvio = gabarito.length - times.timesEnviadoHora[grupoId].length
+                }
 
                 const timeAnalisado = nomeClube(texto).join()
 
