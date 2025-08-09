@@ -6,11 +6,10 @@ const retiraTimeGrupo = "Retirar time do grupo"
 const cadastraTime = "Add times ao grupo"
 const corteCodigo = "Corte suporte codigo"
 const apagaCodigo = "Apagar codigo de suporte"
-const informacoesSuperUser = `UserSeguro = ${userSeguro}\nMandaCartela = ${mandaCartela}\nApagaCartela = ${apagaCartela}\nRetiraTimeGrupo = ${retiraTimeGrupo}\nCadastraTime = ${cadastraTime}\nListaDeTime = ${listaDeTime}\nCorte Codigo Suporte = ${corteCodigo}\nApagar codigo de suporte = ${apagaCodigo}`
-// const sim = "Sim, quero cadastrar"
-// const nao = "Não"
-// const criaMensagem = "Cadastrar mensagem de suporte"
-// const apagaMensagem = "Apagar mensagem de suporte"
+const addMassa = "Add em massa"
+const addGrupo = "Add grupo"
+const listaGrupos = "Mande os ids dos grupos"
+const informacoesSuperUser = `UserSeguro = ${userSeguro}\nMandaCartela = ${mandaCartela}\nApagaCartela = ${apagaCartela}\nRetiraTimeGrupo = ${retiraTimeGrupo}\nCadastraTime = ${cadastraTime}\nListaDeTime = ${listaDeTime}\nCorte Codigo Suporte = ${corteCodigo}\nApagar codigo de suporte = ${apagaCodigo}\nAdd em massa = ${addMassa}\nAdd grupo = ${addGrupo}\nMande os ids dos grupos = ${listaGrupos}\n`
 
 const rgxCorteCodigoSuporte = /Corte suporte codigo/gmi
 
@@ -39,6 +38,9 @@ export {
     cadastraTime, 
     corteCodigo,
     apagaCodigo,
+    addGrupo,
+    addMassa,
+    listaGrupos,
     informacoesSuperUser,
     rgxCorteCodigoSuporte,
     rgxClube,
