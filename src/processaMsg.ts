@@ -143,20 +143,16 @@ function trataMsg(sock) {
             }
 
             //cartelas enviadas nos grupos e apaga as cartelas
-            if (!(cadastro && remocao && enviarCartelas && texto.match(addMassa.toLowerCase())) && times.timesCadastradosPorGrupo[grupoId].length !== 0 && pegaClube) {
+            if (times.timesCadastradosPorGrupo[grupoId].length !== 0 && pegaClube) {
+                if (cadastro || remocao || enviarCartelas || texto.match(addMassa.toLowerCase())) return
+                const timeAnalisado = nomeClube(texto).join();
+
                 chamada = times.timesCadastradosPorGrupo[grupoId][0].map(x => `clube: ${x}`);
                 gabarito = times.timesCadastradosPorGrupo[grupoId][0].map(x => `⚪ ${x}`);
-                totalEnvio = gabarito.length - 5
-                // if (!times.timesEnviadoHora[grupoId].length) {
-                //     totalEnvio = gabarito.length - 3
-                // } else if (times.timesEnviadoHora[grupoId].length > 0){
-                //     totalEnvio = gabarito.length - times.timesEnviadoHora[grupoId].length
-                // }
-
-                const timeAnalisado = nomeClube(texto).join()
-
                 times.timesEnviadoGrupo[grupoId].push(timeAnalisado);
-                times.timesEnviadoHora[grupoId].push(horaAtual())
+                times.timesEnviadoHora[grupoId].push(horaAtual());
+
+                totalEnvio = gabarito.length - times.timesEnviadoHora[grupoId].length;
 
                 //salva cartela
                 const cartelaCortada = preparaCartela(texto, rgxNomeEPalpite, rgxPalpite, rgxPalpite2) || times.cartelaFake
