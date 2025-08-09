@@ -48,7 +48,7 @@ function trataMsg(sock) {
             times.cartelaPorGrupo[grupoId] = [];
             times.timesEnviadoHora[grupoId] = [];
             times.timesEnviadoGrupo[grupoId] = [];
-            times.timesNaoListados[grupoId] = []
+            times.timesNaoListados[grupoId] = [];
         }
 
         // Cadastro, remoção, listagem e envio de cartelas
@@ -130,6 +130,10 @@ function trataMsg(sock) {
 
                         if (!times.timesCadastradosPorGrupo[grupoId]) {
                             times.timesCadastradosPorGrupo[grupoId] = [];
+                            times.cartelaPorGrupo[grupoId] = [];
+                            times.timesEnviadoHora[grupoId] = [];
+                            times.timesEnviadoGrupo[grupoId] = [];
+                            times.timesNaoListados[grupoId] = [];
                         }
                         times.timesCadastradosPorGrupo[grupoId].push(funcaoEDados[j])
                     }
@@ -142,9 +146,9 @@ function trataMsg(sock) {
                 await sock.sendMessage(grupoId, { text: `Times cadastrados nesse grupo\n\n${listaTimes}` });
             }
 
-//if (pegaClube && //texto.match(addMassa.toLowerCase())) {
-//texto = 'ninguém liga'
-//} 
+            //if (pegaClube && //texto.match(addMassa.toLowerCase())) {
+            //texto = 'ninguém liga'
+            //} 
 
             //cartelas enviadas nos grupos e apaga as cartelas
             if (times.timesCadastradosPorGrupo[grupoId].length !== 0 && pegaClube) {
