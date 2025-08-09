@@ -143,7 +143,7 @@ function trataMsg(sock) {
             }
 
             //cartelas enviadas nos grupos e apaga as cartelas
-            if (!(cadastro && remocao && enviarCartelas) && times.timesCadastradosPorGrupo[grupoId].length !== 0 && pegaClube) {
+            if (!(cadastro && remocao && enviarCartelas && texto.match(addMassa.toLowerCase())) && times.timesCadastradosPorGrupo[grupoId].length !== 0 && pegaClube) {
                 chamada = times.timesCadastradosPorGrupo[grupoId][0].map(x => `clube: ${x}`);
                 gabarito = times.timesCadastradosPorGrupo[grupoId][0].map(x => `⚪ ${x}`);
                 totalEnvio = gabarito.length - 5
