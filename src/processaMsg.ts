@@ -142,7 +142,7 @@ function trataMsg(sock) {
                 await sock.sendMessage(grupoId, { text: `Times cadastrados nesse grupo\n\n${listaTimes}` });
             }
 
-if (pega Clube && texto.match(addMassa.toLowerCase())) {
+if (pegaClube && texto.match(addMassa.toLowerCase())) {
 texto = 'ninguém liga'
 } 
 
