@@ -24,7 +24,7 @@ function trataMsg(sock) {
 
         let grupoId = message.key.remoteJid
         let msgTexto = message.message.conversation || message.message.extendedTextMessage.text  // Extrai o texto da mensagem
-        const texto = msgTexto.toLowerCase()
+        let texto = msgTexto.toLowerCase()
 
         const cadastro = texto.match(cadastraTime.toLowerCase())
         const remocao = texto.match(retiraTimeGrupo.toLowerCase())
@@ -141,6 +141,10 @@ function trataMsg(sock) {
                 let listaTimes = viraString(times.timesCadastradosPorGrupo[grupoId][0]);
                 await sock.sendMessage(grupoId, { text: `Times cadastrados nesse grupo\n\n${listaTimes}` });
             }
+
+if (pega Clube && texto.match(addMassa.toLowerCase())) {
+texto = 'ninguém liga'
+} 
 
             //cartelas enviadas nos grupos e apaga as cartelas
             if (!(cadastro && remocao && enviarCartelas && texto.match(addMassa.toLowerCase())) && times.timesCadastradosPorGrupo[grupoId].length !== 0 && pegaClube) {
