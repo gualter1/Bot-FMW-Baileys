@@ -146,11 +146,12 @@ function trataMsg(sock) {
             if (!(cadastro && remocao && enviarCartelas) && times.timesCadastradosPorGrupo[grupoId].length !== 0 && pegaClube) {
                 chamada = times.timesCadastradosPorGrupo[grupoId][0].map(x => `clube: ${x}`);
                 gabarito = times.timesCadastradosPorGrupo[grupoId][0].map(x => `⚪ ${x}`);
-                if (!times.timesEnviadoHora[grupoId].length) {
-                    totalEnvio = gabarito.length - 3
-                } else if (times.timesEnviadoHora[grupoId].length > 0){
-                    totalEnvio = gabarito.length - times.timesEnviadoHora[grupoId].length
-                }
+                totalEnvio = gabarito.length - 5
+                // if (!times.timesEnviadoHora[grupoId].length) {
+                //     totalEnvio = gabarito.length - 3
+                // } else if (times.timesEnviadoHora[grupoId].length > 0){
+                //     totalEnvio = gabarito.length - times.timesEnviadoHora[grupoId].length
+                // }
 
                 const timeAnalisado = nomeClube(texto).join()
 
