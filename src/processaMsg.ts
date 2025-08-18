@@ -16,6 +16,7 @@ const times = {
 
 function trataMsg(sock) {
     sock.ev.on('messages.upsert', async ({ messages, type }) => {
+        try{
 
         const message = messages[0]
         const hasText = message?.message?.conversation || message?.message?.extendedTextMessage?.text
@@ -255,6 +256,9 @@ function trataMsg(sock) {
             }
             //continue...........
         }
+    } catch (error) {
+        console.error("O erro nas mensagens foi ", error)
+    }
     })
 }
 

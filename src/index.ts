@@ -25,25 +25,41 @@ async function startBot() {
       console.log(await qrcode.toString(qr, { type: 'terminal', small: true }))
     }
 
-    if (connection === 'close') {
-      const shouldReconnect = (lastDisconnect?.error as Boom)?.output?.statusCode !== DisconnectReason.loggedOut
-      console.log('Conexão encerrada. Reconectando:', shouldReconnect)
-      if (shouldReconnect) {
-        startBot()
-      }
-    } else
-      if (connection === 'open') {
-        console.log('✅ Conectado ao WhatsApp')
-      }
+    try {
+      if (connection === 'close') {
+        const statusCode = (lastDisconnect?.error as Boom)?.output?.statusCode
+        const shouldReconnect = statusCode !== DisconnectReason.loggedOut
+
+        console.log('Conexão encerrada. Reconectando:', shouldReconnect)
+
+        if (shouldReconnect){
+          setTimeout(startBot, 1000)
+        }
+  
+      } else if (connection === 'open') {
+          console.log('✅ Conectado ao WhatsApp')
+        }
+    } catch (error) {
+      console.error("O erro de conexao foi ", error)
+    }
+
   })
   // Salva as credenciais quando forem atualizadas
-  sock.ev.on('creds.update', saveCreds)
+  sock.ev.on('creds.update', async () => {
+    try {
+       await saveCreds ()
+    } catch (error) {
+      console.error("O erro de credenciais foi ", error)
+  
+    }
+
+  }) 
 
   // Mensagens recebidas
   //  sock.ev.on('messages.upsert', async ({ messages, type }) => {
     //  })
 
-  trataMsg(sock)
+    trataMsg(sock)
 }
 
 startBot()
